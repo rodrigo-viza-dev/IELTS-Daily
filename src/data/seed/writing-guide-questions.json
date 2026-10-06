@@ -1,0 +1,26 @@
+[
+  {
+    "id": "taskResponse",
+    "order": 1,
+    "criterionLabelEn": "Task Response",
+    "questionEs": "¿Respondí todas las partes de la consigna y desarrollé una posición clara con ideas relevantes?"
+  },
+  {
+    "id": "coherenceAndCohesion",
+    "order": 2,
+    "criterionLabelEn": "Coherence and Cohesion",
+    "questionEs": "¿Mis párrafos siguen un orden lógico y uso conectores sin repetirlos en exceso?"
+  },
+  {
+    "id": "lexicalResource",
+    "order": 3,
+    "criterionLabelEn": "Lexical Resource",
+    "questionEs": "¿Usé vocabulario variado y preciso sin forzar palabras?"
+  },
+  {
+    "id": "grammaticalRangeAndAccuracy",
+    "order": 4,
+    "criterionLabelEn": "Grammatical Range and Accuracy",
+    "questionEs": "¿Combiné estructuras simples y complejas y revisé gramática, puntuación y concordancia?"
+  }
+]
