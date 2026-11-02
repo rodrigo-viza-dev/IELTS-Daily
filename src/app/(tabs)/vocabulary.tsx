@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import { View } from 'react-native';
 
 import { AppButton } from '@/components/app-button';
@@ -13,18 +14,15 @@ import { getWordOfDay } from '@/utils/word-of-day';
 
 export default function VocabularyScreen() {
   const { state, dispatch } = useAppState();
+  const router = useRouter();
   const today = todayKey();
   const word = getWordOfDay(state.words, today);
   const savedWords = state.words.filter((entry) => entry.isSaved);
 
-  const toggleSaved = () => {
-    if (!word) {
-      return;
-    }
-
+  const toggleSaved = (wordId: string) => {
     dispatch({
       type: 'toggle-word-saved',
-      wordId: word.id,
+      wordId,
       date: today,
       at: new Date().toISOString(),
     });
@@ -71,7 +69,7 @@ export default function VocabularyScreen() {
             <AppButton
               label={word.isSaved ? 'Quitar de mis palabras' : 'Guardar palabra'}
               variant={word.isSaved ? 'secondary' : 'primary'}
-              onPress={toggleSaved}
+              onPress={() => toggleSaved(word.id)}
             />
           </View>
         </View>
@@ -139,6 +137,15 @@ export default function VocabularyScreen() {
                 <AppText variant="small" color="textSecondary">
                   {entry.meaningEs}
                 </AppText>
+                <AppText
+                  variant="smallStrong"
+                  color="primary"
+                  accessibilityRole="button"
+                  accessibilityLabel={`Quitar ${entry.term} de mis palabras`}
+                  onPress={() => toggleSaved(entry.id)}
+                  style={{ alignSelf: 'flex-start' }}>
+                  Quitar
+                </AppText>
               </Card>
             ))}
           </View>
@@ -160,9 +167,14 @@ export default function VocabularyScreen() {
         <View style={{ flex: 1, gap: spacing.xs }}>
           <AppText variant="subtitle">Quiz de repaso</AppText>
           <AppText variant="small" color="textSecondary">
-            La ronda de 5 preguntas se habilitará en la siguiente fase.
+            5 preguntas de opción múltiple con tus palabras guardadas.
           </AppText>
         </View>
+        <AppButton
+          label="Iniciar"
+          fullWidth={false}
+          onPress={() => router.push('/quiz')}
+        />
       </Card>
     </Screen>
   );

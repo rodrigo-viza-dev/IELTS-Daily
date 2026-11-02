@@ -205,7 +205,7 @@ export default function HomeScreen() {
           title="Quiz de repaso"
           subtitle="5 preguntas · 3 min"
           done={Boolean(activity?.quiz)}
-          onPress={() => router.push('/vocabulary')}
+          onPress={() => router.push('/quiz')}
         />
         <TaskRow
           title="Writing Task 2"
