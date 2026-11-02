@@ -3,12 +3,13 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useReducer,
   useState,
   type Dispatch,
   type PropsWithChildren,
-  type SetStateAction,
 } from 'react';
 
+import { appReducer, type AppAction } from '@/context/app-reducer';
 import {
   clearAppState,
   createInitialAppState,
@@ -19,25 +20,27 @@ import type { AppState } from '@/types/models';
 
 type AppContextValue = {
   state: AppState;
+  dispatch: Dispatch<AppAction>;
   isHydrated: boolean;
-  setState: Dispatch<SetStateAction<AppState>>;
   resetState: () => Promise<void>;
 };
 
 const AppContext = createContext<AppContextValue | undefined>(undefined);
 
 export function AppProvider({ children }: PropsWithChildren) {
-  const [state, setState] = useState<AppState>(() => createInitialAppState());
+  const [state, dispatch] = useReducer(appReducer, undefined, createInitialAppState);
   const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
 
     void loadAppState().then((loadedState) => {
-      if (isMounted) {
-        setState(loadedState);
-        setIsHydrated(true);
+      if (!isMounted) {
+        return;
       }
+
+      dispatch({ type: 'hydrate', state: loadedState });
+      setIsHydrated(true);
     });
 
     return () => {
@@ -46,18 +49,20 @@ export function AppProvider({ children }: PropsWithChildren) {
   }, []);
 
   useEffect(() => {
-    if (isHydrated) {
-      void saveAppState(state).catch(() => undefined);
+    if (!isHydrated) {
+      return;
     }
+
+    void saveAppState(state).catch(() => undefined);
   }, [isHydrated, state]);
 
   const resetState = useCallback(async () => {
     await clearAppState();
-    setState(createInitialAppState());
+    dispatch({ type: 'reset' });
   }, []);
 
   return (
-    <AppContext.Provider value={{ state, isHydrated, setState, resetState }}>
+    <AppContext.Provider value={{ state, dispatch, isHydrated, resetState }}>
       {children}
     </AppContext.Provider>
   );

@@ -2,281 +2,361 @@
   {
     "id": "word-analyze",
     "term": "analyze",
-    "meaningEs": "examinar algo de manera detallada",
+    "category": "Academic skills",
     "partOfSpeech": "verb",
+    "definitionEn": "to examine something in detail in order to understand it",
+    "meaningEs": "examinar algo de manera detallada",
     "exampleEn": "Students should analyze the evidence before reaching a conclusion."
   },
   {
     "id": "word-approach",
     "term": "approach",
-    "meaningEs": "manera de tratar o resolver un asunto",
+    "category": "Academic skills",
     "partOfSpeech": "noun",
+    "definitionEn": "a way of dealing with a situation or problem",
+    "meaningEs": "manera de tratar o resolver un asunto",
     "exampleEn": "The project uses a practical approach to language learning."
   },
   {
     "id": "word-assess",
     "term": "assess",
-    "meaningEs": "evaluar la calidad, el valor o el efecto de algo",
+    "category": "Education",
     "partOfSpeech": "verb",
+    "definitionEn": "to judge the quality, value or effect of something",
+    "meaningEs": "evaluar la calidad, el valor o el efecto de algo",
     "exampleEn": "Teachers assess progress through short weekly tasks."
   },
   {
     "id": "word-assumption",
     "term": "assumption",
-    "meaningEs": "idea que se acepta como verdadera sin comprobarla",
+    "category": "Academic skills",
     "partOfSpeech": "noun",
+    "definitionEn": "something accepted as true without proof",
+    "meaningEs": "idea que se acepta como verdadera sin comprobarla",
     "exampleEn": "The survey challenges the assumption that all commuters own a car."
   },
   {
     "id": "word-benefit",
     "term": "benefit",
-    "meaningEs": "ventaja o resultado positivo",
+    "category": "Society",
     "partOfSpeech": "noun",
+    "definitionEn": "a positive result or advantage",
+    "meaningEs": "ventaja o resultado positivo",
     "exampleEn": "One benefit of public parks is that they support community health."
   },
   {
     "id": "word-challenge",
     "term": "challenge",
-    "meaningEs": "dificultad que requiere esfuerzo para superarse",
+    "category": "Society",
     "partOfSpeech": "noun",
+    "definitionEn": "a difficulty that requires effort to overcome",
+    "meaningEs": "dificultad que requiere esfuerzo para superarse",
     "exampleEn": "Limited funding remains a challenge for small libraries."
   },
   {
     "id": "word-contribute",
     "term": "contribute",
-    "meaningEs": "aportar algo para ayudar a lograr un resultado",
+    "category": "Society",
     "partOfSpeech": "verb",
+    "definitionEn": "to give something that helps achieve a result",
+    "meaningEs": "aportar algo para ayudar a lograr un resultado",
     "exampleEn": "Local businesses can contribute ideas to the transport plan."
   },
   {
     "id": "word-crucial",
     "term": "crucial",
-    "meaningEs": "muy importante para que algo tenga éxito",
+    "category": "Academic skills",
     "partOfSpeech": "adjective",
+    "definitionEn": "extremely important for success",
+    "meaningEs": "muy importante para que algo tenga éxito",
     "exampleEn": "Reliable information is crucial when people choose a course."
   },
   {
     "id": "word-decline",
     "term": "decline",
-    "meaningEs": "disminuir en cantidad, calidad o importancia",
+    "category": "Economy",
     "partOfSpeech": "verb",
+    "definitionEn": "to decrease in amount, quality or importance",
+    "meaningEs": "disminuir en cantidad, calidad o importancia",
     "exampleEn": "Several towns have seen a decline in local bus services."
   },
   {
     "id": "word-demonstrate",
     "term": "demonstrate",
-    "meaningEs": "mostrar o probar algo con evidencia",
+    "category": "Academic skills",
     "partOfSpeech": "verb",
+    "definitionEn": "to show or prove something with evidence",
+    "meaningEs": "mostrar o probar algo con evidencia",
     "exampleEn": "The results demonstrate the value of regular practice."
   },
   {
     "id": "word-diverse",
     "term": "diverse",
-    "meaningEs": "formado por personas o elementos diferentes",
+    "category": "Society",
     "partOfSpeech": "adjective",
+    "definitionEn": "made up of people or things that are different",
+    "meaningEs": "formado por personas o elementos diferentes",
     "exampleEn": "A diverse team can offer more perspectives on a problem."
   },
   {
     "id": "word-efficient",
     "term": "efficient",
-    "meaningEs": "que logra un resultado usando poco tiempo o recursos",
+    "category": "Work",
     "partOfSpeech": "adjective",
+    "definitionEn": "achieving a result with little waste of time or resources",
+    "meaningEs": "que logra un resultado usando poco tiempo o recursos",
     "exampleEn": "The new route is more efficient during the morning rush."
   },
   {
     "id": "word-emerge",
     "term": "emerge",
-    "meaningEs": "aparecer o comenzar a ser conocido",
+    "category": "Society",
     "partOfSpeech": "verb",
+    "definitionEn": "to appear or become known",
+    "meaningEs": "aparecer o comenzar a ser conocido",
     "exampleEn": "New ideas may emerge when residents work together."
   },
   {
     "id": "word-enhance",
     "term": "enhance",
-    "meaningEs": "mejorar una cualidad o una experiencia",
+    "category": "Education",
     "partOfSpeech": "verb",
+    "definitionEn": "to improve the quality or value of something",
+    "meaningEs": "mejorar una cualidad o una experiencia",
     "exampleEn": "Quiet study rooms can enhance students' concentration."
   },
   {
     "id": "word-environment",
     "term": "environment",
-    "meaningEs": "entorno natural o condiciones que rodean a alguien",
+    "category": "Environment",
     "partOfSpeech": "noun",
+    "definitionEn": "the natural world or the conditions around someone",
+    "meaningEs": "entorno natural o condiciones que rodean a alguien",
     "exampleEn": "Schools can help students protect the environment."
   },
   {
     "id": "word-establish",
     "term": "establish",
-    "meaningEs": "crear, iniciar o demostrar algo de forma firme",
+    "category": "Society",
     "partOfSpeech": "verb",
+    "definitionEn": "to create or set something up firmly",
+    "meaningEs": "crear, iniciar o demostrar algo de forma firme",
     "exampleEn": "The university plans to establish a quiet zone on campus."
   },
   {
     "id": "word-evidence",
     "term": "evidence",
-    "meaningEs": "información que ayuda a demostrar que algo es cierto",
+    "category": "Academic skills",
     "partOfSpeech": "noun",
+    "definitionEn": "facts or information that show something is true",
+    "meaningEs": "información que ayuda a demostrar que algo es cierto",
     "exampleEn": "There is evidence that short breaks improve attention."
   },
   {
     "id": "word-factor",
     "term": "factor",
-    "meaningEs": "elemento que influye en una situación o resultado",
+    "category": "Academic skills",
     "partOfSpeech": "noun",
+    "definitionEn": "one element that influences a situation or result",
+    "meaningEs": "elemento que influye en una situación o resultado",
     "exampleEn": "Cost is an important factor in students' travel choices."
   },
   {
     "id": "word-feasible",
     "term": "feasible",
-    "meaningEs": "posible de realizar en la práctica",
+    "category": "Work",
     "partOfSpeech": "adjective",
+    "definitionEn": "possible to do in practice",
+    "meaningEs": "posible de realizar en la práctica",
     "exampleEn": "The committee must decide whether the proposal is feasible."
   },
   {
     "id": "word-fluctuate",
     "term": "fluctuate",
-    "meaningEs": "cambiar de manera irregular entre distintos niveles",
+    "category": "Economy",
     "partOfSpeech": "verb",
+    "definitionEn": "to change irregularly between different levels",
+    "meaningEs": "cambiar de manera irregular entre distintos niveles",
     "exampleEn": "Food prices can fluctuate throughout the year."
   },
   {
     "id": "word-furthermore",
     "term": "furthermore",
-    "meaningEs": "además; se usa para agregar otra idea",
+    "category": "Academic skills",
     "partOfSpeech": "adverb",
+    "definitionEn": "used to add another idea or reason",
+    "meaningEs": "además; se usa para agregar otra idea",
     "exampleEn": "The course is affordable; furthermore, it is available online."
   },
   {
     "id": "word-generate",
     "term": "generate",
-    "meaningEs": "producir o crear algo",
+    "category": "Economy",
     "partOfSpeech": "verb",
+    "definitionEn": "to produce or create something",
+    "meaningEs": "producir o crear algo",
     "exampleEn": "Community gardens can generate interest in healthy food."
   },
   {
     "id": "word-impact",
     "term": "impact",
-    "meaningEs": "efecto importante que algo produce",
+    "category": "Society",
     "partOfSpeech": "noun",
+    "definitionEn": "a strong effect that something has",
+    "meaningEs": "efecto importante que algo produce",
     "exampleEn": "The policy could have a positive impact on young workers."
   },
   {
     "id": "word-implement",
     "term": "implement",
-    "meaningEs": "poner en práctica una idea o un plan",
+    "category": "Government",
     "partOfSpeech": "verb",
+    "definitionEn": "to put a plan or idea into practice",
+    "meaningEs": "poner en práctica una idea o un plan",
     "exampleEn": "The city will implement the recycling plan next month."
   },
   {
     "id": "word-indicate",
     "term": "indicate",
-    "meaningEs": "señalar o mostrar algo",
+    "category": "Academic skills",
     "partOfSpeech": "verb",
+    "definitionEn": "to show or point out something",
+    "meaningEs": "señalar o mostrar algo",
     "exampleEn": "The figures indicate a growing demand for evening classes."
   },
   {
     "id": "word-inevitable",
     "term": "inevitable",
-    "meaningEs": "que no se puede evitar",
+    "category": "Society",
     "partOfSpeech": "adjective",
+    "definitionEn": "impossible to avoid",
+    "meaningEs": "que no se puede evitar",
     "exampleEn": "Some changes are inevitable as the population grows."
   },
   {
     "id": "word-maintain",
     "term": "maintain",
-    "meaningEs": "conservar algo en una condición o nivel",
+    "category": "Government",
     "partOfSpeech": "verb",
+    "definitionEn": "to keep something at the same level or condition",
+    "meaningEs": "conservar algo en una condición o nivel",
     "exampleEn": "The council must maintain the paths in public parks."
   },
   {
     "id": "word-perspective",
     "term": "perspective",
-    "meaningEs": "forma particular de entender un asunto",
+    "category": "Academic skills",
     "partOfSpeech": "noun",
+    "definitionEn": "a particular way of understanding an issue",
+    "meaningEs": "forma particular de entender un asunto",
     "exampleEn": "Talking to older residents offers a different perspective."
   },
   {
     "id": "word-priority",
     "term": "priority",
-    "meaningEs": "asunto que recibe atención antes que otros",
+    "category": "Government",
     "partOfSpeech": "noun",
+    "definitionEn": "something that is dealt with before other things",
+    "meaningEs": "asunto que recibe atención antes que otros",
     "exampleEn": "Improving safety should be the first priority of the project."
   },
   {
     "id": "word-promote",
     "term": "promote",
-    "meaningEs": "apoyar o fomentar una actividad o idea",
+    "category": "Education",
     "partOfSpeech": "verb",
+    "definitionEn": "to encourage or support an activity or idea",
+    "meaningEs": "apoyar o fomentar una actividad o idea",
     "exampleEn": "Libraries can promote independent learning in every neighbourhood."
   },
   {
     "id": "word-require",
     "term": "require",
-    "meaningEs": "necesitar algo como condición",
+    "category": "Government",
     "partOfSpeech": "verb",
+    "definitionEn": "to need something as a condition",
+    "meaningEs": "necesitar algo como condición",
     "exampleEn": "The application may require proof of residence."
   },
   {
     "id": "word-resilient",
     "term": "resilient",
-    "meaningEs": "capaz de recuperarse después de una dificultad",
+    "category": "Society",
     "partOfSpeech": "adjective",
+    "definitionEn": "able to recover after a difficulty",
+    "meaningEs": "capaz de recuperarse después de una dificultad",
     "exampleEn": "Resilient communities can adapt to sudden changes."
   },
   {
     "id": "word-significant",
     "term": "significant",
-    "meaningEs": "importante o suficientemente grande para notarse",
+    "category": "Academic skills",
     "partOfSpeech": "adjective",
+    "definitionEn": "large or important enough to be noticed",
+    "meaningEs": "importante o suficientemente grande para notarse",
     "exampleEn": "The renovation made a significant difference to the building."
   },
   {
     "id": "word-strategy",
     "term": "strategy",
-    "meaningEs": "plan diseñado para alcanzar un objetivo",
+    "category": "Work",
     "partOfSpeech": "noun",
+    "definitionEn": "a plan designed to achieve a goal",
+    "meaningEs": "plan diseñado para alcanzar un objetivo",
     "exampleEn": "A clear strategy helps learners use their study time well."
   },
   {
     "id": "word-sustain",
     "term": "sustain",
-    "meaningEs": "mantener algo durante un periodo largo",
+    "category": "Environment",
     "partOfSpeech": "verb",
+    "definitionEn": "to keep something going over a long period",
+    "meaningEs": "mantener algo durante un periodo largo",
     "exampleEn": "The service needs regular funding to sustain its activities."
   },
   {
     "id": "word-trend",
     "term": "trend",
-    "meaningEs": "dirección general en la que algo cambia",
+    "category": "Economy",
     "partOfSpeech": "noun",
+    "definitionEn": "the general direction in which something changes",
+    "meaningEs": "dirección general en la que algo cambia",
     "exampleEn": "The report identifies a trend toward smaller households."
   },
   {
     "id": "word-valid",
     "term": "valid",
-    "meaningEs": "lógico, aceptable o basado en información suficiente",
+    "category": "Academic skills",
     "partOfSpeech": "adjective",
+    "definitionEn": "reasonable, acceptable or based on enough information",
+    "meaningEs": "lógico, aceptable o basado en información suficiente",
     "exampleEn": "Both sides presented valid reasons for their decisions."
   },
   {
     "id": "word-whereas",
     "term": "whereas",
-    "meaningEs": "mientras que; introduce un contraste",
+    "category": "Academic skills",
     "partOfSpeech": "conjunction",
+    "definitionEn": "used to introduce a contrast between two ideas",
+    "meaningEs": "mientras que; introduce un contraste",
     "exampleEn": "Some people prefer buses, whereas others choose to cycle."
   },
   {
     "id": "word-widespread",
     "term": "widespread",
-    "meaningEs": "presente en muchos lugares o entre muchas personas",
+    "category": "Society",
     "partOfSpeech": "adjective",
+    "definitionEn": "found in many places or among many people",
+    "meaningEs": "presente en muchos lugares o entre muchas personas",
     "exampleEn": "Widespread access to the internet has changed study habits."
   },
   {
     "id": "word-yield",
     "term": "yield",
-    "meaningEs": "producir un resultado o beneficio",
+    "category": "Work",
     "partOfSpeech": "verb",
+    "definitionEn": "to produce a result or benefit",
+    "meaningEs": "producir un resultado o beneficio",
     "exampleEn": "Small daily efforts can yield steady improvements over time."
   }
 ]

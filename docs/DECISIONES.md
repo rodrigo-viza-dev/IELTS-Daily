@@ -1,44 +1,66 @@
 # Decisiones del proyecto
 
-## Fase 1: Base
+## Fase 1: base, diseño, onboarding e Inicio
 
-- La app funciona como un producto local y offline-first para un único usuario.
-- No se implementan login, backend, sincronización, pagos ni funciones sociales.
-- Expo Router organiza las pantallas dentro de `src/app/`. El grupo `src/app/(tabs)/` contiene las cuatro tabs principales: Inicio, Vocabulario, Writing y Progreso. Ajustes queda fuera de las tabs.
-- Se usa el componente `Tabs` de Expo Router en lugar de `NativeTabs`, porque la navegación JavaScript mantiene el mismo comportamiento en Android, iOS y web y evita depender de una API experimental.
-- La interfaz se prepara en español; las palabras, ejemplos y consignas de práctica están en inglés.
-- Se mantiene una paleta propia de IELTS Daily con variantes clara y oscura, sin añadir una dependencia de tipografías o un sistema visual pesado.
-
-## Estado y almacenamiento
-
-- El estado de la aplicación se gestiona con React Context mediante `AppProvider`.
-- AsyncStorage guarda un único documento JSON bajo la clave `@ielts-daily/app-state-v1`.
-- El documento persistido tiene `schemaVersion: 1` para permitir migraciones explícitas en el futuro.
-- AsyncStorage no cifra los datos. Los ensayos se consideran datos locales del usuario y no se envían a un servidor.
-- Si el documento no existe, está corrupto o no coincide con el esquema conocido, se crea un estado inicial con las palabras semilla en estado `new`.
-- Las consignas de Writing y las preguntas guía son contenido estático del paquete y no se duplican en el estado persistido.
-- El borrado de datos elimina únicamente el documento de AsyncStorage; las semillas permanecen en la aplicación.
+- Se reutilizó el avance existente del repositorio en lugar de reiniciar el proyecto. Se conservaron las 40 palabras académicas y los 12 temas originales de Writing; se descartaron las pantallas de ejemplo y los componentes del scaffold que no aportaban.
+- Expo Router organiza las pantallas en `src/app/`. Las cuatro tabs viven en `src/app/(tabs)/`: Inicio, Vocabulario, Writing y Progreso. Onboarding y Ajustes quedan fuera de las tabs.
+- Se usa el componente `Tabs` de Expo Router en lugar de `NativeTabs` para mantener el mismo comportamiento en Android, iOS y web.
+- La interfaz está en español; el contenido de práctica (palabras, definiciones y consignas) está en inglés.
+- La dirección visual sigue `docs/mockups/referencia-1.png` y `docs/mockups/referencia-2.png`: fondo gris muy claro, tarjetas blancas con borde sutil, radios de 16–20 px, azul principal, verde para completado y ámbar para advertencias.
+- Se fijó **tema claro** y se retiró la variante oscura del scaffold. Los mockups y el alcance del MVP no requieren modo oscuro; eliminarlo reduce trabajo de revisión visual.
+- La tipografía es la del sistema, con jerarquías centralizadas en `src/theme/typography.ts`. El contenido se limita a 560 px de ancho en pantallas amplias.
+- Se implementó un editor básico de banda y fecha en Ajustes durante la Fase 1 para que la navegación desde Inicio no termine en una pantalla sin función. El recordatorio local y el borrado de datos se completan en la Fase 4.
 
 ## Modelo de datos
 
-- `UserProfile` representa la banda objetivo, la fecha opcional del examen y el recordatorio local.
-- Las bandas objetivo aceptan valores de 5.0 a 9.0 en incrementos de 0.5.
-- `Word` conserva el contenido semilla y su progreso (`new`, `review` o `mastered`). En esta fase no se implementa repetición espaciada.
-- `QuizResult` registra cinco preguntas y sus respuestas, aunque el quiz se implementará en una fase posterior.
-- `WritingEntry` reserva el texto, el conteo de palabras, el tiempo, los cuatro criterios y la banda global.
-- Los scores de autoevaluación serán enteros de 1 a 9. La autoevaluación será orientativa y no reemplazará una calificación oficial.
-- `DailyLog` usa una fecha local `YYYY-MM-DD` y un timestamp ISO 8601 para registrar las actividades del día.
-- Las fechas de calendario usan la zona horaria local del dispositivo; los timestamps se guardan en formato ISO 8601.
+- Los modelos se alinearon con el alcance: `Profile`, `Word`, `QuizResult`, `Essay`, `DailyActivity` y `AppState`.
+- Se subió el esquema a `schemaVersion: 2` y se cambió la clave de almacenamiento a `@ielts-daily/app-state-v2`. No hay migración desde la versión 1 porque no existían datos reales de usuario.
+- `Profile.targetBand` acepta valores de 5.0 a 9.0 en incrementos de 0.5. `examDate` es opcional.
+- `Word` conserva el contenido semilla (`category`, `partOfSpeech`, `definitionEn`, `meaningEs`, `exampleEn`) y el progreso local (`isSaved`, `status`, `reviewCount`, `lastReviewedAt`).
+- `QuizResult` registra fecha local, respuestas y aciertos. `Essay` guarda borrador, texto, palabras, tiempo, criterios y banda estimada. `DailyActivity` usa una fecha local `YYYY-MM-DD` y tres tareas.
+- Las fechas de calendario se construyen con la zona horaria local del dispositivo para evitar desfases por UTC. Los timestamps se guardan en ISO 8601.
+- La racha cuenta días consecutivos con al menos una tarea completada. Si hoy aún no hay actividad, la racha se mantiene desde ayer; si tampoco hubo actividad ayer, es 0.
+- La palabra del día se calcula de forma determinista a partir de la fecha local (`YYYYMMDD % cantidad de palabras`).
+- Guardar la palabra del día (o marcarla como repaso/dominada) completa la tarea `wordOfDay` de ese día. Desmarcarla no borra el historial de actividad.
+
+## Estado y almacenamiento
+
+- `AppProvider` usa `useReducer` y expone `state`, `dispatch`, `isHydrated` y `resetState`. Es la única fuente de verdad.
+- El reducer separa las reglas de negocio (marcar tareas, actualizar progreso de palabras, guardar ensayos) de los componentes visuales.
+- Se guarda un único documento JSON validado al leer. Si falta, está corrupto o no coincide con el esquema, se crea un estado inicial seguro.
+- Las palabras guardadas se reconcilian con las semillas por `id`, de modo que el contenido puede actualizarse sin perder el progreso.
+- AsyncStorage no cifra los datos. Los ensayos son datos locales y no se envían a ningún servidor.
+- Borrar datos eliminará la clave v2 y la clave legada v1; las semillas permanecen en la aplicación.
 
 ## Contenido semilla
 
-- `words.json` contiene 40 palabras académicas con definición en español y ejemplo en inglés.
-- `writing-prompts.json` contiene 12 consignas originales de Writing Task 2. No se copiaron preguntas oficiales.
-- `writing-guide-questions.json` contiene una pregunta guía para cada criterio de autoevaluación.
-- Los IDs de las semillas son estables y no deben cambiarse sin una migración de datos.
+- `words.json` contiene 40 palabras académicas reales con categoría, tipo de palabra, definición en inglés, traducción al español y ejemplo en inglés.
+- `writing-prompts.json` contiene 12 consignas originales de Writing Task 2 con categoría temática. No se copiaron preguntas oficiales.
+- `writing-guide-questions.json` contiene una pregunta guía en español por cada criterio de autoevaluación.
+- Los `id` de las semillas son estables y no deben cambiarse sin una migración.
+
+## Dependencias
+
+- Se conservaron solo las dependencias necesarias: Expo, Expo Router, AsyncStorage, vector icons, safe area, screens, web y los peers requeridos por Expo Router (`expo-constants`, `expo-linking`, `react-native-gesture-handler`, `react-native-reanimated`, `react-native-worklets`).
+- Se añadió `expo-font` como peer obligatorio de `@expo/vector-icons`.
+- Se retiraron `@expo/ui`, `expo-device`, `expo-glass-effect`, `expo-image`, `expo-symbols`, `expo-system-ui` y `expo-web-browser` del manifiesto directo.
+- No se añadieron librerías de gráficos, estado, formularios ni estilos.
+
+## Entrada de fechas
+
+- No se añadió un selector de fecha nativo para evitar otra dependencia. La fecha se escribe con máscara `DD/MM/AAAA` y se valida como fecha real y futura.
+- Si el usuario deja la fecha vacía, Inicio muestra un estado sin cuenta regresiva y un acceso a Ajustes. La cuenta regresiva nunca muestra valores negativos.
 
 ## Alcance de esta fase
 
-- Las pantallas muestran la estructura y el contenido preparado, pero no implementan onboarding, edición de perfil, repaso, quiz, editor de Writing, temporizador, gráficos ni notificaciones.
-- La implementación de esas funciones queda para las fases siguientes según `AGENTS.md`.
-- Los assets visuales del scaffold de Expo se conservan temporalmente porque `app.json` todavía los referencia. Se reemplazarán cuando se trabaje la identidad visual final.
+- Implementado: proyecto base, tema, modelos, reducer, persistencia, onboarding, navegación por tabs, Inicio, edición básica de perfil y pantallas informativas de Vocabulario, Writing y Progreso con datos reales.
+- Pendiente: banco de vocabulario interactivo completo, quiz de cinco preguntas, editor de Writing con temporizador, autoevaluación, gráficos de Progreso, recordatorio local y borrado seguro.
+- La tarea "Quiz de repaso" de Inicio navega temporalmente a Vocabulario hasta que exista la ruta `/quiz` en la Fase 2. La tarea de Writing navega a la tab con los temas disponibles.
+
+## Verificación de la fase
+
+- `npx tsc --noEmit`: sin errores.
+- `npm run lint`: sin errores.
+- `npx expo-doctor`: 21/21 comprobaciones correctas.
+- `npx expo export --platform web`: exportación estática correcta.
+- No se probó en dispositivo físico ni emulador. La comprobación fue estática y de compilación/exportación web.

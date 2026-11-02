@@ -31,15 +31,16 @@ export type WritingCriterion =
   | 'lexicalResource'
   | 'grammaticalRangeAndAccuracy';
 
+export type DailyTask = 'wordOfDay' | 'quiz' | 'writing';
+
 export type LocalDate = string;
 export type IsoDateTime = string;
 
-export interface UserProfile {
-  id: string;
+export interface Profile {
   targetBand: TargetBand;
   examDate: LocalDate | null;
   reminderEnabled: boolean;
-  reminderTime: string | null;
+  reminderTime: string;
   createdAt: IsoDateTime;
   updatedAt: IsoDateTime;
 }
@@ -47,14 +48,16 @@ export interface UserProfile {
 export interface WordSeed {
   id: string;
   term: string;
-  meaningEs: string;
+  category: string;
   partOfSpeech: WordPartOfSpeech;
+  definitionEn: string;
+  meaningEs: string;
   exampleEn: string;
 }
 
 export interface Word extends WordSeed {
-  status: WordStatus;
   isSaved: boolean;
+  status: WordStatus;
   reviewCount: number;
   lastReviewedAt: IsoDateTime | null;
 }
@@ -66,8 +69,9 @@ export interface QuizAnswer {
 
 export interface QuizResult {
   id: string;
+  date: LocalDate;
   completedAt: IsoDateTime;
-  totalQuestions: 5;
+  totalQuestions: number;
   correctAnswers: number;
   answers: QuizAnswer[];
 }
@@ -75,6 +79,7 @@ export interface QuizResult {
 export interface WritingPrompt {
   id: string;
   title: string;
+  category: string;
   question: string;
 }
 
@@ -85,17 +90,17 @@ export interface WritingScores {
   grammaticalRangeAndAccuracy: CriterionScore;
 }
 
-export interface WritingEntry {
+export interface Essay {
   id: string;
   promptId: string;
   body: string;
   wordCount: number;
   startedAt: IsoDateTime;
+  updatedAt: IsoDateTime;
   completedAt: IsoDateTime | null;
   elapsedSeconds: number;
   scores: WritingScores | null;
   overallBand: BandScore | null;
-  updatedAt: IsoDateTime;
 }
 
 export interface GuideQuestion {
@@ -105,21 +110,19 @@ export interface GuideQuestion {
   questionEs: string;
 }
 
-export interface DailyLog {
+export interface DailyActivity {
   date: LocalDate;
-  tasks: {
-    wordOfDay: boolean;
-    quiz: boolean;
-    writing: boolean;
-  };
+  wordOfDay: boolean;
+  quiz: boolean;
+  writing: boolean;
   updatedAt: IsoDateTime;
 }
 
 export interface AppState {
-  schemaVersion: 1;
-  profile: UserProfile | null;
+  schemaVersion: 2;
+  profile: Profile | null;
   words: Word[];
   quizResults: QuizResult[];
-  writingEntries: WritingEntry[];
-  dailyLogs: DailyLog[];
+  essays: Essay[];
+  dailyActivities: DailyActivity[];
 }

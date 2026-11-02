@@ -2,61 +2,73 @@
   {
     "id": "prompt-flexible-university-schedules",
     "title": "Flexible university schedules",
+    "category": "Educación",
     "question": "Some universities are considering flexible schedules that let students choose between online and classroom sessions each week. Discuss the advantages and disadvantages of this arrangement and give your own opinion."
   },
   {
     "id": "prompt-public-transport-priorities",
     "title": "Public transport priorities",
+    "category": "Ciudad",
     "question": "A city has enough money to improve either its bus network or its bicycle infrastructure, but not both at the same time. Which investment should receive priority? Give reasons for your answer."
   },
   {
     "id": "prompt-smartphones-in-classrooms",
     "title": "Smartphones in classrooms",
+    "category": "Tecnología",
     "question": "Some schools allow students to use smartphones during lessons for research and collaborative tasks, while others prohibit them. Discuss both views and give your own opinion."
   },
   {
     "id": "prompt-four-day-working-week",
     "title": "The four-day working week",
+    "category": "Trabajo",
     "question": "Many employers are exploring a four-day working week with the same total number of hours. Do the advantages of this change outweigh the disadvantages?"
   },
   {
     "id": "prompt-supermarket-food-waste",
     "title": "Supermarket food waste",
+    "category": "Medio ambiente",
     "question": "Supermarkets should be required to donate unsold food that is still safe to eat instead of throwing it away. To what extent do you agree or disagree?"
   },
   {
     "id": "prompt-urban-community-gardens",
     "title": "Urban community gardens",
+    "category": "Ciudad",
     "question": "Cities should turn some unused public land into community gardens rather than use it for additional parking. Discuss the benefits and possible drawbacks of this policy."
   },
   {
     "id": "prompt-community-service-graduation",
     "title": "Community service before graduation",
+    "category": "Educación",
     "question": "Some people believe that university students should complete a period of community service before graduating. Discuss the advantages and disadvantages of this requirement."
   },
   {
     "id": "prompt-translation-tools-language-learning",
     "title": "Translation tools and language learning",
+    "category": "Tecnología",
     "question": "Instant translation tools make communication easier, but some people think they reduce the motivation to learn languages. Discuss both views and give your own opinion."
   },
   {
     "id": "prompt-work-experience-secondary-school",
     "title": "Work experience at secondary school",
+    "category": "Educación",
     "question": "Secondary schools should offer every student a short period of supervised work experience before they finish their studies. Do you agree or disagree?"
   },
   {
     "id": "prompt-cultural-festivals-tourism",
     "title": "Cultural festivals and tourism",
+    "category": "Cultura",
     "question": "Local governments often use cultural festivals to attract visitors. Is this a positive way to support small-town economies, or can it cause more problems than benefits?"
   },
   {
     "id": "prompt-repairing-electronic-products",
     "title": "Repairing electronic products",
+    "category": "Consumo",
     "question": "Manufacturers should make electronic products easier and cheaper to repair. What are the reasons for this view, and what problems could it create?"
   },
   {
     "id": "prompt-digital-public-libraries",
     "title": "Digital services in public libraries",
+    "category": "Tecnología",
     "question": "Public libraries should spend more money on digital services than on printed books. Discuss both sides and give your own opinion."
   }
 ]
