@@ -1,14 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import {
-  ActivityIndicator,
-  Modal,
-  Pressable,
-  Switch,
-  TextInput,
-  View,
-} from 'react-native';
+import { Modal, View } from 'react-native';
 
 import { AppButton } from '@/components/app-button';
 import { AppText } from '@/components/app-text';
@@ -18,40 +11,13 @@ import { DateInput } from '@/components/date-input';
 import { LoadingScreen } from '@/components/loading-screen';
 import { Screen } from '@/components/screen';
 import { useAppState } from '@/context/AppProvider';
-import { colors, radius, spacing, typography } from '@/theme';
+import { colors, radius, spacing } from '@/theme';
 import type { LocalDate, TargetBand } from '@/types/models';
 import {
   formatDateKeyForInput,
-  formatTimeLabel,
   isFutureDateKey,
   parseDateInput,
 } from '@/utils/date';
-import {
-  cancelDailyReminder,
-  notificationsSupported,
-  scheduleDailyReminder,
-} from '@/utils/notifications';
-
-function isValidTime(value: string): boolean {
-  return /^([01]\d|2[0-3]):[0-5]\d$/.test(value);
-}
-
-function formatTimeInput(raw: string): string {
-  const digits = raw.replace(/\D/g, '').slice(0, 4);
-  return digits.length <= 2 ? digits : `${digits.slice(0, 2)}:${digits.slice(2)}`;
-}
-
-function reminderErrorMessage(reason: 'permission' | 'unsupported' | 'web') {
-  if (reason === 'permission') {
-    return 'No hay permiso para las notificaciones. Actívalo en los ajustes del sistema.';
-  }
-
-  if (reason === 'web') {
-    return 'Los recordatorios locales no están disponibles en la versión web.';
-  }
-
-  return 'No se pudo programar el recordatorio. Puede requerir un development build en Android o iOS.';
-}
 
 export default function SettingsScreen() {
   const { state, dispatch, resetState } = useAppState();
@@ -63,27 +29,12 @@ export default function SettingsScreen() {
   );
   const [error, setError] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
-  const [reminderEnabled, setReminderEnabled] = useState(
-    profile?.reminderEnabled ?? false,
-  );
-  const [reminderTime, setReminderTime] = useState(profile?.reminderTime ?? '20:00');
-  const [reminderBusy, setReminderBusy] = useState(false);
-  const [reminderMessage, setReminderMessage] = useState<string | null>(null);
-  const [reminderError, setReminderError] = useState<string | null>(null);
   const [deleteVisible, setDeleteVisible] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
   if (!profile) {
     return <LoadingScreen />;
   }
-
-  const persistReminder = (enabled: boolean, time: string) => {
-    dispatch({
-      type: 'update-profile',
-      patch: { reminderEnabled: enabled, reminderTime: time },
-      updatedAt: new Date().toISOString(),
-    });
-  };
 
   const handleBandChange = (value: TargetBand) => {
     setBand(value);
@@ -124,70 +75,10 @@ export default function SettingsScreen() {
     setSaved(true);
   };
 
-  const handleReminderToggle = async (value: boolean) => {
-    setReminderError(null);
-    setReminderMessage(null);
-
-    if (!value) {
-      setReminderBusy(true);
-      await cancelDailyReminder();
-      setReminderBusy(false);
-      setReminderEnabled(false);
-      persistReminder(false, reminderTime);
-      setReminderMessage('Recordatorio desactivado.');
-      return;
-    }
-
-    if (!isValidTime(reminderTime)) {
-      setReminderError('Usa una hora válida en formato HH:MM, por ejemplo 20:00.');
-      return;
-    }
-
-    setReminderBusy(true);
-    const result = await scheduleDailyReminder(reminderTime);
-    setReminderBusy(false);
-
-    if (!result.ok) {
-      setReminderEnabled(false);
-      persistReminder(false, reminderTime);
-      setReminderError(reminderErrorMessage(result.reason));
-      return;
-    }
-
-    setReminderEnabled(true);
-    persistReminder(true, reminderTime);
-    setReminderMessage(`Recordatorio activo a las ${formatTimeLabel(reminderTime)}.`);
-  };
-
-  const handleUpdateReminderTime = async () => {
-    setReminderError(null);
-    setReminderMessage(null);
-
-    if (!isValidTime(reminderTime)) {
-      setReminderError('Usa una hora válida en formato HH:MM, por ejemplo 20:00.');
-      return;
-    }
-
-    setReminderBusy(true);
-    const result = await scheduleDailyReminder(reminderTime);
-    setReminderBusy(false);
-
-    if (!result.ok) {
-      setReminderEnabled(false);
-      persistReminder(false, reminderTime);
-      setReminderError(reminderErrorMessage(result.reason));
-      return;
-    }
-
-    persistReminder(reminderEnabled, reminderTime);
-    setReminderMessage(`Hora actualizada a las ${formatTimeLabel(reminderTime)}.`);
-  };
-
   const handleDelete = async () => {
     setDeleting(true);
 
     try {
-      await cancelDailyReminder();
       await resetState();
       setDeleteVisible(false);
       router.replace('/onboarding');
@@ -246,118 +137,26 @@ export default function SettingsScreen() {
           </View>
         ) : null}
 
-        <Card style={{ gap: spacing.md }}>
+        <Card style={{ flexDirection: 'row', gap: spacing.md }}>
           <View
             style={{
-              flexDirection: 'row',
+              width: 40,
+              height: 40,
+              borderRadius: radius.pill,
+              backgroundColor: colors.warningSoft,
               alignItems: 'center',
-              justifyContent: 'space-between',
-              gap: spacing.md,
+              justifyContent: 'center',
             }}>
-            <View style={{ flex: 1, gap: spacing.xs }}>
-              <AppText variant="subtitle">Recordatorio diario</AppText>
-              <AppText variant="small" color="textSecondary">
-                Un aviso local para no perder la racha.
-              </AppText>
-            </View>
-            {reminderBusy ? (
-              <ActivityIndicator color={colors.primary} />
-            ) : (
-              <Switch
-                accessibilityLabel="Activar recordatorio diario"
-                value={notificationsSupported && reminderEnabled}
-                onValueChange={handleReminderToggle}
-                disabled={!notificationsSupported}
-                trackColor={{ false: colors.borderStrong, true: colors.primary }}
-                thumbColor={colors.white}
-              />
-            )}
+            <Ionicons name="notifications-off-outline" size={20} color={colors.warning} />
           </View>
-
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              gap: spacing.md,
-            }}>
+          <View style={{ flex: 1, gap: spacing.xs }}>
+            <AppText variant="subtitle">Recordatorio diario</AppText>
             <AppText variant="small" color="textSecondary">
-              Hora
+              Pendiente para el final. Esta versión prioriza la rutina, el progreso y el
+              borrado seguro; los avisos locales se incorporarán cuando sean compatibles
+              con el entorno de prueba.
             </AppText>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
-              <TextInput
-                value={reminderTime}
-                onChangeText={(value) => {
-                  setReminderTime(formatTimeInput(value));
-                  setReminderError(null);
-                  setReminderMessage(null);
-                }}
-                keyboardType="number-pad"
-                maxLength={5}
-                accessibilityLabel="Hora del recordatorio"
-                style={{
-                  width: 96,
-                  height: 44,
-                  borderRadius: radius.sm,
-                  borderWidth: 1,
-                  borderColor: colors.border,
-                  backgroundColor: colors.surface,
-                  textAlign: 'center',
-                  ...typography.body,
-                  color: colors.text,
-                }}
-              />
-              {reminderEnabled ? (
-                <Pressable
-                  accessibilityRole="button"
-                  accessibilityLabel="Actualizar hora del recordatorio"
-                  onPress={handleUpdateReminderTime}
-                  disabled={reminderBusy}
-                  style={({ pressed }) => ({
-                    minHeight: 44,
-                    justifyContent: 'center',
-                    paddingHorizontal: spacing.sm,
-                    opacity: pressed ? 0.7 : 1,
-                  })}>
-                  <AppText variant="smallStrong" color="primary">
-                    Actualizar
-                  </AppText>
-                </Pressable>
-              ) : null}
-            </View>
           </View>
-
-          {!notificationsSupported ? (
-            <AppText variant="small" color="warningText">
-              Los recordatorios locales no están disponibles en la versión web. Usa un
-              development build en Android o iOS.
-            </AppText>
-          ) : null}
-
-          {reminderError ? (
-            <AppText variant="small" color="danger">
-              {reminderError}
-            </AppText>
-          ) : reminderMessage ? (
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                gap: spacing.sm,
-                padding: spacing.md,
-                borderRadius: radius.md,
-                backgroundColor: colors.successSoft,
-              }}>
-              <Ionicons name="checkmark-circle" size={18} color={colors.success} />
-              <AppText variant="smallStrong" color="successText" style={{ flex: 1 }}>
-                {reminderMessage}
-              </AppText>
-            </View>
-          ) : (
-            <AppText variant="small" color="textMuted">
-              El permiso se solicita solo al activar el recordatorio. En Expo Go puede requerir un development build.
-            </AppText>
-          )}
         </Card>
 
         <Card style={{ flexDirection: 'row', gap: spacing.md }}>

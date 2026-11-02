@@ -5,9 +5,6 @@ import { useEffect } from 'react';
 import { LoadingScreen } from '@/components/loading-screen';
 import { AppProvider, useAppState } from '@/context/AppProvider';
 import { colors } from '@/theme';
-import { configureNotifications } from '@/utils/notifications';
-
-configureNotifications();
 
 function RootNavigator() {
   const { state, isHydrated } = useAppState();

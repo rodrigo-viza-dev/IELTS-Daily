@@ -9,7 +9,7 @@
 - La dirección visual sigue `docs/mockups/referencia-1.png` y `docs/mockups/referencia-2.png`: fondo gris muy claro, tarjetas blancas con borde sutil, radios de 16–20 px, azul principal, verde para completado y ámbar para advertencias.
 - Se fijó **tema claro** y se retiró la variante oscura del scaffold. Los mockups y el alcance del MVP no requieren modo oscuro; eliminarlo reduce trabajo de revisión visual.
 - La tipografía es la del sistema, con jerarquías centralizadas en `src/theme/typography.ts`. El contenido se limita a 560 px de ancho en pantallas amplias.
-- Se implementó un editor básico de banda y fecha en Ajustes durante la Fase 1 para que la navegación desde Inicio no termine en una pantalla sin función. El recordatorio local y el borrado de datos se completan en la Fase 4.
+- Se implementó un editor básico de banda y fecha en Ajustes durante la Fase 1 para que la navegación desde Inicio no termine en una pantalla sin función. El borrado de datos se completó en la Fase 4; el recordatorio local se intentó y se difirió por incompatibilidad con Expo Go.
 
 ## Fase 2: Vocabulario y quiz
 
@@ -36,10 +36,10 @@
 - Progreso deriva todas sus métricas del estado global: racha actual y máxima, palabras guardadas, quizzes, ensayos, actividad de los últimos siete días y evolución de la banda estimada de los últimos seis ensayos.
 - La actividad semanal cuenta tareas completadas por día (0 a 3). Los gráficos se construyen con `View` y estilos; no se añadió una librería de gráficos.
 - Ajustes permite editar banda y fecha con la misma validación del onboarding. Los cambios se reflejan de inmediato en Inicio.
-- El recordatorio es local y diario con `expo-notifications`. Se pide permiso solo al activarlo, se crea el canal de Android y se cancela al desactivarlo o al borrar los datos.
-- En web los recordatorios locales no están disponibles: el control se desactiva y se explica el motivo. Si el entorno no permite programar, se muestra un error y se sugiere un development build; nunca se simula un recordatorio activo.
-- El borrado de datos usa un modal de confirmación. Cancelar conserva todo; confirmar cancela recordatorios, elimina las claves v2 y v1, restablece el estado y vuelve a Onboarding.
-- Se añadió el plugin `expo-notifications` en `app.json` y la configuración del manejador en el layout raíz.
+- El recordatorio local se implementó con `expo-notifications`, pero en Expo Go SDK 57 la carga del módulo impedía abrir la app: el layout raíz quedaba sin export default y Expo Router fallaba con `Cannot read property 'ErrorBoundary' of undefined`.
+- Para mantener el MVP funcional se retiró `expo-notifications` del arranque, de Ajustes, de `app.json` y de `package.json`. Ajustes muestra una nota de función pendiente; no hay interruptor ni simulación.
+- Los campos `reminderEnabled` y `reminderTime` se conservan en el perfil y en la validación de almacenamiento para una integración futura, pero no se editan en esta versión.
+- El borrado de datos usa un modal de confirmación. Cancelar conserva todo; confirmar elimina las claves v2 y v1, restablece el estado y vuelve a Onboarding. Los recordatorios quedan pendientes.
 
 ## Fase 5: pulido y revisión
 
@@ -48,6 +48,7 @@
 - Se evitó que la última tarjeta de métricas de Progreso se estire a todo el ancho y se añadió `try/finally` al borrado para no dejar el modal bloqueado si falla el almacenamiento.
 - No se añadieron funciones fuera del alcance ni datos simulados para llenar gráficos o métricas.
 - La documentación final se actualizó con comandos, rutas, límites y recorridos de prueba.
+- Se retiró el módulo de notificaciones del arranque y de Ajustes; la app vuelve a abrir sin él y los recordatorios quedan como trabajo futuro.
 
 ## Modelo de datos
 
@@ -81,7 +82,7 @@
 
 - Se conservaron solo las dependencias necesarias: Expo, Expo Router, AsyncStorage, vector icons, safe area, screens, web y los peers requeridos por Expo Router (`expo-constants`, `expo-linking`, `react-native-gesture-handler`, `react-native-reanimated`, `react-native-worklets`).
 - Se añadió `expo-font` como peer obligatorio de `@expo/vector-icons`.
-- Se añadió `expo-notifications` para el recordatorio local y su plugin en `app.json`. No se añadieron librerías de gráficos, estado, formularios ni estilos.
+- Se retiró `expo-notifications` y su plugin para evitar el fallo de arranque en Expo Go. No se añadieron librerías de gráficos, estado, formularios ni estilos.
 - Se retiraron `@expo/ui`, `expo-device`, `expo-glass-effect`, `expo-image`, `expo-symbols`, `expo-system-ui` y `expo-web-browser` del manifiesto directo.
 
 ## Entrada de fechas
@@ -91,8 +92,9 @@
 
 ## Estado final del MVP
 
-- Implementado: base, tema, modelos, reducer, persistencia versionada, onboarding, Inicio, Vocabulario, quiz, Writing con temporizador y borrador, autoevaluación, Progreso, Ajustes, recordatorio local y borrado seguro.
+- Implementado: base, tema, modelos, reducer, persistencia versionada, onboarding, Inicio, Vocabulario, quiz, Writing con temporizador y borrador, autoevaluación, Progreso, Ajustes y borrado seguro.
 - Fuera de alcance por decisión: login, backend, pagos, IA, voz, Listening, Reading, Speaking y funciones sociales.
+- Diferido: recordatorio local. Se retiró para que la app abra en Expo Go; queda documentado como trabajo futuro.
 - Pendiente de prueba interactiva en dispositivo físico o navegador real. La verificación actual es estática, de compilación, de exportación web y de lógica pura.
 
 ## Verificación final
@@ -101,5 +103,6 @@
 - `npm run lint`: sin errores.
 - `npx expo-doctor`: 21/21 comprobaciones correctas.
 - `npx expo export --platform web`: exportación estática correcta con 14 rutas.
+- `npx expo export --platform android`: bundle de Android correcto, sin `expo-notifications`.
 - Se comprobaron con `tsx` las bandas, fechas, rachas, palabra del día, quiz y las transiciones principales del reducer.
 - No se probó en dispositivo físico ni emulador. No se afirma que los recorridos se hayan ejecutado en un dispositivo; quedan documentados en `docs/PRUEBAS.md` para la prueba final.

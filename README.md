@@ -17,7 +17,7 @@ La autoevaluación de Writing es **orientativa** y no reemplaza una calificació
 5. Writing Task 2 con 12 temas, editor, temporizador de 40 minutos, conteo de palabras y borrador persistente.
 6. Autoevaluación con los 4 criterios de IELTS, escala 1–9 y banda estimada redondeada a 0.5.
 7. Progreso con rachas, actividad semanal, totales y evolución de ensayos.
-8. Ajustes con edición de perfil, recordatorio local y borrado seguro.
+8. Ajustes con edición de perfil, borrado seguro y recordatorio diferido.
 
 ## Stack y dependencias principales
 
@@ -26,7 +26,6 @@ La autoevaluación de Writing es **orientativa** y no reemplaza una calificació
 - AsyncStorage para persistencia local.
 - Context + `useReducer` para el estado.
 - `@expo/vector-icons` para iconos.
-- `expo-notifications` para el recordatorio local.
 - Gráficos con `View` y estilos, sin librerías externas.
 
 ## Instalación y ejecución
@@ -42,7 +41,7 @@ Para web:
 npm run web
 ```
 
-Para Android o iOS usa Expo Go o un development build compatible con Expo SDK 57. El recordatorio local puede requerir un development build; la app lo informa y no simula que está activo si falla.
+Para Android o iOS usa Expo Go o un development build compatible con Expo SDK 57. Esta versión no incluye recordatorios locales; la app abre sin ese módulo.
 
 ## Comandos de verificación
 
@@ -73,21 +72,21 @@ npx expo export --platform web
 - `src/storage/`: carga, validación y persistencia versionada.
 - `src/theme/`: colores, tipografía, espaciado, radios y sombras.
 - `src/types/`: modelos de dominio.
-- `src/utils/`: fechas, rachas, bandas, palabra del día, quiz y notificaciones.
+- `src/utils/`: fechas, rachas, bandas, palabra del día y quiz.
 - `docs/`: mockups y decisiones.
 
 ## Persistencia
 
 Se guarda un único documento JSON versionado (`schemaVersion: 2`) en AsyncStorage bajo `@ielts-daily/app-state-v2`. Al leer se valida el esquema y se reconcilian las palabras semilla con el progreso guardado. Si el documento no existe o está corrupto, se crea un estado inicial seguro.
 
-Los datos no se cifran ni se envían a un servidor: permanecen en el dispositivo. Borrar datos elimina el documento local y cancela los recordatorios programados.
+Los datos no se cifran ni se envían a un servidor: permanecen en el dispositivo. Borrar datos elimina el documento local.
 
-## Notificaciones
+## Recordatorios
 
-- Se pide permiso solo al activar el recordatorio.
-- En web los recordatorios locales no están disponibles; Ajustes lo explica y desactiva el control.
-- Si el entorno no permite programar la notificación, se muestra un error y se sugiere un development build. No se muestra el recordatorio como activo.
-- El recordatorio es local y diario; no se usan notificaciones push remotas.
+- Los recordatorios locales quedaron **diferidos para el final**. En Expo Go SDK 57 la carga de `expo-notifications` impedía abrir la app, así que se retiró el módulo del arranque y de Ajustes para mantener el MVP funcional.
+- Ajustes muestra una nota de que la función está pendiente; no hay interruptor ni simulación de recordatorio activo.
+- Los campos `reminderEnabled` y `reminderTime` se conservan en el perfil para una futura integración, pero no se editan en esta versión.
+- Cuando se retome, se usará una notificación local diaria, se pedirá permiso solo al activarla y se probará en un development build.
 
 ## Limitación de la autoevaluación
 
@@ -99,6 +98,7 @@ La banda calculada es una autoestimación basada en los cuatro criterios y la pe
 - `npm run lint`: sin errores.
 - `npx expo-doctor`: 21/21 comprobaciones correctas.
 - `npx expo export --platform web`: exportación estática correcta con 14 rutas.
+- `npx expo export --platform android`: bundle de Android correcto sin `expo-notifications`.
 - Lógica de bandas, fechas, rachas, palabra del día, quiz y reducer comprobada con `tsx`.
 - No se probó en dispositivo físico ni emulador. La verificación fue estática, de compilación/exportación web y de lógica pura. Las pruebas interactivas quedan para el entorno del usuario.
 
@@ -123,5 +123,5 @@ Onboarding, Inicio con cuenta regresiva, Vocabulario, Quiz con retroalimentació
 ## Limitaciones pendientes
 
 - Sin login, backend, sincronización, IA, voz, Listening, Reading ni Speaking.
-- El recordatorio local depende del permiso del sistema y de un entorno compatible.
+- El recordatorio local queda pendiente para el final por incompatibilidad con Expo Go en esta versión.
 - La prueba en dispositivo físico queda pendiente.

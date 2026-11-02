@@ -177,17 +177,3 @@ export function parseDateInput(value: string): LocalDate | null {
 
   return toLocalDateKey(date);
 }
-
-export function formatTimeLabel(time: string): string {
-  const match = /^(\d{2}):(\d{2})$/.exec(time);
-
-  if (!match) {
-    return time;
-  }
-
-  const hours = Number(match[1]);
-  const minutes = match[2];
-  const suffix = hours >= 12 ? 'p. m.' : 'a. m.';
-  const displayHours = hours % 12 === 0 ? 12 : hours % 12;
-  return `${displayHours}:${minutes} ${suffix}`;
-}
