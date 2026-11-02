@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { View } from 'react-native';
+import { Pressable, View } from 'react-native';
 
 import { AppText } from '@/components/app-text';
 import { Card } from '@/components/card';
@@ -131,15 +131,24 @@ export default function HomeScreen() {
                 : 'Agrega una fecha en Ajustes para ver cuántos días faltan.'}
             </AppText>
             <View style={{ marginTop: spacing.xs }}>
-              <AppText
-                variant="smallStrong"
-                color="white"
-                onPress={() => router.push('/settings')}
+              <Pressable
                 accessibilityRole="button"
                 accessibilityLabel="Ir a Ajustes para configurar la fecha del examen"
-                style={{ textDecorationLine: 'underline' }}>
-                Configurar en Ajustes
-              </AppText>
+                hitSlop={6}
+                onPress={() => router.push('/settings')}
+                style={({ pressed }) => ({
+                  alignSelf: 'flex-start',
+                  minHeight: 44,
+                  justifyContent: 'center',
+                  opacity: pressed ? 0.7 : 1,
+                })}>
+                <AppText
+                  variant="smallStrong"
+                  color="white"
+                  style={{ textDecorationLine: 'underline' }}>
+                  Configurar en Ajustes
+                </AppText>
+              </Pressable>
             </View>
             <AppText
               variant="bodyStrong"

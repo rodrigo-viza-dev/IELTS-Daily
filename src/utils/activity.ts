@@ -1,9 +1,5 @@
-import type { DailyActivity, DailyTask } from '@/types/models';
+import type { DailyActivity } from '@/types/models';
 import { addDaysToKey } from '@/utils/date';
-
-export function isTaskDone(activity: DailyActivity | undefined, task: DailyTask): boolean {
-  return activity ? activity[task] : false;
-}
 
 export function hasAnyActivity(activity: DailyActivity | undefined): boolean {
   return activity ? activity.wordOfDay || activity.quiz || activity.writing : false;

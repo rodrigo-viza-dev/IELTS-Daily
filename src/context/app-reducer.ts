@@ -26,13 +26,6 @@ export type AppAction =
       date: LocalDate;
       at: IsoDateTime;
     }
-  | {
-      type: 'set-word-status';
-      wordId: string;
-      status: WordStatus;
-      date: LocalDate;
-      at: IsoDateTime;
-    }
   | { type: 'record-quiz'; result: QuizResult }
   | { type: 'save-essay'; essay: Essay; date: LocalDate }
   | { type: 'reset' };
@@ -128,25 +121,6 @@ export function appReducer(state: AppState, action: AppAction): AppState {
       const wordOfDay = getWordOfDay(state.words, action.date);
       const dailyActivities =
         willSave && wordOfDay?.id === action.wordId
-          ? markActivity(state.dailyActivities, action.date, 'wordOfDay', action.at)
-          : state.dailyActivities;
-
-      return { ...state, words, dailyActivities };
-    }
-
-    case 'set-word-status': {
-      const target = state.words.find((word) => word.id === action.wordId);
-
-      if (!target) {
-        return state;
-      }
-
-      const words = state.words.map((word) =>
-        word.id === action.wordId ? { ...word, status: action.status } : word,
-      );
-      const wordOfDay = getWordOfDay(state.words, action.date);
-      const dailyActivities =
-        action.status !== 'new' && wordOfDay?.id === action.wordId
           ? markActivity(state.dailyActivities, action.date, 'wordOfDay', action.at)
           : state.dailyActivities;
 

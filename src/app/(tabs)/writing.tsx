@@ -1,10 +1,12 @@
 import { Ionicons } from '@expo/vector-icons';
-import { View } from 'react-native';
+import { useRouter } from 'expo-router';
+import { Pressable, View } from 'react-native';
 
 import { AppText } from '@/components/app-text';
 import { Card } from '@/components/card';
 import { Pill } from '@/components/pill';
 import { Screen } from '@/components/screen';
+import { useAppState } from '@/context/AppProvider';
 import { writingPrompts } from '@/data/seed';
 import { colors, radius, spacing } from '@/theme';
 
@@ -15,6 +17,12 @@ const STEPS = [
 ];
 
 export default function WritingScreen() {
+  const { state } = useAppState();
+  const router = useRouter();
+  const drafts = state.essays.filter(
+    (essay) => essay.completedAt === null && essay.body.trim().length > 0,
+  );
+
   return (
     <Screen>
       <View style={{ gap: spacing.xs }}>
@@ -62,15 +70,47 @@ export default function WritingScreen() {
         </View>
 
         <View style={{ gap: spacing.md }}>
-          {writingPrompts.map((prompt) => (
-            <Card key={prompt.id} style={{ gap: spacing.sm }}>
-              <Pill label={prompt.category} tone="primary" />
-              <AppText variant="bodyStrong">{prompt.title}</AppText>
-              <AppText variant="small" color="textSecondary">
-                {prompt.question}
-              </AppText>
-            </Card>
-          ))}
+          {writingPrompts.map((prompt) => {
+            const hasDraft = drafts.some((essay) => essay.promptId === prompt.id);
+
+            return (
+              <Pressable
+                key={prompt.id}
+                accessibilityRole="button"
+                accessibilityLabel={`Escribir sobre ${prompt.title}`}
+                onPress={() => router.push(`/writing/${prompt.id}`)}
+                style={({ pressed }) => ({ opacity: pressed ? 0.8 : 1 })}>
+                <Card style={{ gap: spacing.sm }}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      gap: spacing.sm,
+                    }}>
+                    <Pill label={prompt.category} tone="primary" />
+                    {hasDraft ? <Pill label="Borrador" tone="warning" /> : null}
+                  </View>
+                  <AppText variant="bodyStrong">{prompt.title}</AppText>
+                  <AppText variant="small" color="textSecondary">
+                    {prompt.question}
+                  </AppText>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      justifyContent: 'flex-end',
+                      gap: spacing.xs,
+                    }}>
+                    <AppText variant="smallStrong" color="primary">
+                      Escribir
+                    </AppText>
+                    <Ionicons name="chevron-forward" size={16} color={colors.primary} />
+                  </View>
+                </Card>
+              </Pressable>
+            );
+          })}
         </View>
       </View>
     </Screen>

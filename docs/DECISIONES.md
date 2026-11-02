@@ -11,6 +11,44 @@
 - La tipografía es la del sistema, con jerarquías centralizadas en `src/theme/typography.ts`. El contenido se limita a 560 px de ancho en pantallas amplias.
 - Se implementó un editor básico de banda y fecha en Ajustes durante la Fase 1 para que la navegación desde Inicio no termine en una pantalla sin función. El recordatorio local y el borrado de datos se completan en la Fase 4.
 
+## Fase 2: Vocabulario y quiz
+
+- La palabra del día se obtiene del banco local de forma determinista; no se guarda una copia distinta por día.
+- Guardar y retirar una palabra alterna un booleano sobre la misma semilla. No se crean duplicados y la lista de guardados se deriva del estado global.
+- El estado de aprendizaje es `new`, `review` o `mastered`. Cada respuesta de quiz incrementa `reviewCount`; con dos o más repasos la palabra pasa a `mastered`. El estado se puede revisar en Vocabulario.
+- El quiz elige cinco palabras únicas, prioriza las guardadas y completa con el banco local. Cada pregunta usa cuatro opciones tomadas de otras palabras y no repite palabras dentro de la ronda.
+- La retroalimentación muestra la respuesta correcta y una explicación breve con la traducción. El resultado se guarda como `QuizResult` y marca la actividad diaria del quiz.
+- La tarea de quiz de Inicio navega a `/quiz`. Se añadieron guardas para evitar doble avance por doble pulsación.
+
+## Fase 3: Writing y autoevaluación
+
+- Cada tema tiene como máximo un borrador activo, identificado por el `promptId`. El borrador guarda texto, `startedAt` y segundos transcurridos, de modo que se puede retomar al volver a la pantalla o reabrir la app.
+- El temporizador de 40 minutos se calcula con marcas de tiempo, no solo contando intervalos. Admite iniciar, pausar y reanudar; al llegar a cero se detiene y permite enviar a autoevaluación.
+- El conteo de palabras usa separación por espacios. Si hay menos de 250 se muestra una advertencia, pero no se bloquea el envío.
+- El borrador se persiste con un retardo de 700 ms al escribir, al pausar y al desmontar la pantalla. Al guardar el ensayo se elimina el borrador y se registra la actividad de Writing.
+- La autoevaluación se presenta en un modal con los cuatro criterios oficiales, una pregunta guía en español por criterio y una escala de 1 a 9.
+- La banda estimada es el promedio de los cuatro criterios redondeado al 0.5 más cercano. Se guarda junto con el texto, la fecha, el tiempo y las palabras.
+- La interfaz repite que es una autoestimación orientativa. No se usa IA ni se presenta como calificación oficial.
+- La tab de Writing muestra los temas y un indicador de borrador; al guardar un ensayo se navega a Progreso.
+
+## Fase 4: Progreso, Ajustes y recordatorios
+
+- Progreso deriva todas sus métricas del estado global: racha actual y máxima, palabras guardadas, quizzes, ensayos, actividad de los últimos siete días y evolución de la banda estimada de los últimos seis ensayos.
+- La actividad semanal cuenta tareas completadas por día (0 a 3). Los gráficos se construyen con `View` y estilos; no se añadió una librería de gráficos.
+- Ajustes permite editar banda y fecha con la misma validación del onboarding. Los cambios se reflejan de inmediato en Inicio.
+- El recordatorio es local y diario con `expo-notifications`. Se pide permiso solo al activarlo, se crea el canal de Android y se cancela al desactivarlo o al borrar los datos.
+- En web los recordatorios locales no están disponibles: el control se desactiva y se explica el motivo. Si el entorno no permite programar, se muestra un error y se sugiere un development build; nunca se simula un recordatorio activo.
+- El borrado de datos usa un modal de confirmación. Cancelar conserva todo; confirmar cancela recordatorios, elimina las claves v2 y v1, restablece el estado y vuelve a Onboarding.
+- Se añadió el plugin `expo-notifications` en `app.json` y la configuración del manejador en el layout raíz.
+
+## Fase 5: pulido y revisión
+
+- Se revisaron estados vacíos: sin palabras guardadas, sin borradores, sin ensayos, sin quizzes y quiz con menos de cuatro palabras disponibles.
+- Se mejoraron áreas táctiles y etiquetas de accesibilidad: acciones de texto convertidas en `Pressable`, objetivos de al menos 44 px y botones de puntuación con ancho suficiente.
+- Se evitó que la última tarjeta de métricas de Progreso se estire a todo el ancho y se añadió `try/finally` al borrado para no dejar el modal bloqueado si falla el almacenamiento.
+- No se añadieron funciones fuera del alcance ni datos simulados para llenar gráficos o métricas.
+- La documentación final se actualizó con comandos, rutas, límites y recorridos de prueba.
+
 ## Modelo de datos
 
 - Los modelos se alinearon con el alcance: `Profile`, `Word`, `QuizResult`, `Essay`, `DailyActivity` y `AppState`.
@@ -21,7 +59,7 @@
 - Las fechas de calendario se construyen con la zona horaria local del dispositivo para evitar desfases por UTC. Los timestamps se guardan en ISO 8601.
 - La racha cuenta días consecutivos con al menos una tarea completada. Si hoy aún no hay actividad, la racha se mantiene desde ayer; si tampoco hubo actividad ayer, es 0.
 - La palabra del día se calcula de forma determinista a partir de la fecha local (`YYYYMMDD % cantidad de palabras`).
-- Guardar la palabra del día (o marcarla como repaso/dominada) completa la tarea `wordOfDay` de ese día. Desmarcarla no borra el historial de actividad.
+- Guardar la palabra del día completa la tarea `wordOfDay` de ese día. Desmarcarla no borra el historial de actividad.
 
 ## Estado y almacenamiento
 
@@ -43,24 +81,25 @@
 
 - Se conservaron solo las dependencias necesarias: Expo, Expo Router, AsyncStorage, vector icons, safe area, screens, web y los peers requeridos por Expo Router (`expo-constants`, `expo-linking`, `react-native-gesture-handler`, `react-native-reanimated`, `react-native-worklets`).
 - Se añadió `expo-font` como peer obligatorio de `@expo/vector-icons`.
+- Se añadió `expo-notifications` para el recordatorio local y su plugin en `app.json`. No se añadieron librerías de gráficos, estado, formularios ni estilos.
 - Se retiraron `@expo/ui`, `expo-device`, `expo-glass-effect`, `expo-image`, `expo-symbols`, `expo-system-ui` y `expo-web-browser` del manifiesto directo.
-- No se añadieron librerías de gráficos, estado, formularios ni estilos.
 
 ## Entrada de fechas
 
 - No se añadió un selector de fecha nativo para evitar otra dependencia. La fecha se escribe con máscara `DD/MM/AAAA` y se valida como fecha real y futura.
 - Si el usuario deja la fecha vacía, Inicio muestra un estado sin cuenta regresiva y un acceso a Ajustes. La cuenta regresiva nunca muestra valores negativos.
 
-## Alcance de esta fase
+## Estado final del MVP
 
-- Implementado: proyecto base, tema, modelos, reducer, persistencia, onboarding, navegación por tabs, Inicio, edición básica de perfil y pantallas informativas de Vocabulario, Writing y Progreso con datos reales.
-- Pendiente: banco de vocabulario interactivo completo, quiz de cinco preguntas, editor de Writing con temporizador, autoevaluación, gráficos de Progreso, recordatorio local y borrado seguro.
-- La tarea "Quiz de repaso" de Inicio navega temporalmente a Vocabulario hasta que exista la ruta `/quiz` en la Fase 2. La tarea de Writing navega a la tab con los temas disponibles.
+- Implementado: base, tema, modelos, reducer, persistencia versionada, onboarding, Inicio, Vocabulario, quiz, Writing con temporizador y borrador, autoevaluación, Progreso, Ajustes, recordatorio local y borrado seguro.
+- Fuera de alcance por decisión: login, backend, pagos, IA, voz, Listening, Reading, Speaking y funciones sociales.
+- Pendiente de prueba interactiva en dispositivo físico o navegador real. La verificación actual es estática, de compilación, de exportación web y de lógica pura.
 
-## Verificación de la fase
+## Verificación final
 
 - `npx tsc --noEmit`: sin errores.
 - `npm run lint`: sin errores.
 - `npx expo-doctor`: 21/21 comprobaciones correctas.
-- `npx expo export --platform web`: exportación estática correcta.
-- No se probó en dispositivo físico ni emulador. La comprobación fue estática y de compilación/exportación web.
+- `npx expo export --platform web`: exportación estática correcta con 14 rutas.
+- Se comprobaron con `tsx` las bandas, fechas, rachas, palabra del día, quiz y las transiciones principales del reducer.
+- No se probó en dispositivo físico ni emulador. No se afirma que los recorridos se hayan ejecutado en un dispositivo; quedan documentados en `docs/PRUEBAS.md` para la prueba final.

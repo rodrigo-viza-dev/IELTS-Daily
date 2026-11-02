@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { View } from 'react-native';
+import { Pressable, View } from 'react-native';
 
 import { AppButton } from '@/components/app-button';
 import { AppText } from '@/components/app-text';
@@ -137,15 +137,21 @@ export default function VocabularyScreen() {
                 <AppText variant="small" color="textSecondary">
                   {entry.meaningEs}
                 </AppText>
-                <AppText
-                  variant="smallStrong"
-                  color="primary"
+                <Pressable
                   accessibilityRole="button"
                   accessibilityLabel={`Quitar ${entry.term} de mis palabras`}
+                  hitSlop={6}
                   onPress={() => toggleSaved(entry.id)}
-                  style={{ alignSelf: 'flex-start' }}>
-                  Quitar
-                </AppText>
+                  style={({ pressed }) => ({
+                    alignSelf: 'flex-start',
+                    minHeight: 44,
+                    justifyContent: 'center',
+                    opacity: pressed ? 0.6 : 1,
+                  })}>
+                  <AppText variant="smallStrong" color="primary">
+                    Quitar
+                  </AppText>
+                </Pressable>
               </Card>
             ))}
           </View>

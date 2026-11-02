@@ -40,6 +40,8 @@ const WEEKDAYS_LONG = [
   'sábado',
 ];
 
+const WEEKDAYS_INITIAL = ['D', 'L', 'M', 'M', 'J', 'V', 'S'];
+
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
 function pad2(value: number): string {
@@ -131,6 +133,16 @@ export function formatLongDate(date: Date = new Date()): string {
   const weekday = WEEKDAYS_LONG[date.getDay()];
   const capitalized = weekday.charAt(0).toUpperCase() + weekday.slice(1);
   return `${capitalized} ${date.getDate()} de ${MONTHS_LONG[date.getMonth()]}`;
+}
+
+export function weekdayInitial(key: LocalDate): string {
+  const date = parseLocalDateKey(key);
+  return date ? WEEKDAYS_INITIAL[date.getDay()] : '';
+}
+
+export function formatDayMonthShort(key: LocalDate): string {
+  const date = parseLocalDateKey(key);
+  return date ? `${date.getDate()}/${date.getMonth() + 1}` : '';
 }
 
 export function formatDateKeyForInput(key: LocalDate | null): string {

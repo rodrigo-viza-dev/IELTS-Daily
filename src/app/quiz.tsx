@@ -1,5 +1,5 @@
 import { useRouter } from 'expo-router';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Pressable, View } from 'react-native';
 
 import { AppButton } from '@/components/app-button';
@@ -24,6 +24,7 @@ export default function QuizScreen() {
   const [selected, setSelected] = useState<string | null>(null);
   const [answers, setAnswers] = useState<QuizAnswer[]>([]);
   const [finished, setFinished] = useState(false);
+  const finishedRef = useRef(false);
 
   const correctSoFar = answers.filter((answer) => answer.isCorrect).length;
   const question = questions[index];
@@ -37,7 +38,7 @@ export default function QuizScreen() {
   };
 
   const handleSelect = (option: string) => {
-    if (!question || selected !== null) {
+    if (!question || selected !== null || answers.length > index) {
       return;
     }
 
@@ -49,7 +50,7 @@ export default function QuizScreen() {
   };
 
   const handleNext = () => {
-    if (finished || !question) {
+    if (finished || finishedRef.current || !question) {
       return;
     }
 
@@ -59,6 +60,7 @@ export default function QuizScreen() {
       return;
     }
 
+    finishedRef.current = true;
     dispatch({ type: 'record-quiz', result: createQuizResult(answers) });
     setFinished(true);
   };
@@ -69,6 +71,7 @@ export default function QuizScreen() {
     setSelected(null);
     setAnswers([]);
     setFinished(false);
+    finishedRef.current = false;
   };
 
   if (questions.length < 4) {
